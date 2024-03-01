@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feedback Sentiment Analysis</title>
+</head>
+<body>
+    <h1>Feedback Sentiment Analysis</h1>
+    <form id="feedback-form">
+        <textarea id="feedback-input" rows="4" cols="50" placeholder="Enter your feedback here..."></textarea><br>
+        <input type="submit" value="Analyze Sentiment">
+    </form>
+    <div id="result"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script>
+        document.getElementById('feedback-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const text = document.getElementById('feedback-input').value;
+            axios.post('/analyze', { text })
+                .then(function (response) {
+                    document.getElementById('result').innerHTML = `
+                        <p>Sentiment Score: ${response.data.score}</p>
+                        <p>Comparative: ${response.data.comparative}</p>
+                        <p>Analysis: ${response.data.score > 0 ? 'Positive' : response.data.score < 0 ? 'Negative' : 'Neutral'}</p>
+                    `;
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+        });
+    </script>
+</body>
+</html>
